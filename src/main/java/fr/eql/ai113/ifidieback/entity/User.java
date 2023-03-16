@@ -30,12 +30,15 @@ public class User {
     @OneToOne
     private Roles role ;
     @JsonIgnore
-    private Address address;
+    @OneToMany
+    private List<Address> addresses;
+    @OneToOne
     private User trustedPerson;
 
     @JsonIgnore
     @OneToMany
     private List <TimeCapsule> timeCapsules;
+    @OneToOne
     private Cenotaphe cenotaphe;
     @JsonIgnore
     @OneToMany
@@ -61,8 +64,36 @@ public class User {
     public User() {
     }
 
+    /**
+     * Constructor use to register a basic user
+     * @param lastname
+     * @param surname
+     * @param password
+     * @param phone_nb
+     * @param email
+     * @param date_of_birth
+     */
+    public User(String lastname, String surname, String password, String phone_nb, String email, LocalDate date_of_birth) {
+        this.lastname = lastname;
+        this.surname = surname;
+        this.password = password;
+        this.phone_nb = phone_nb;
+        this.email = email;
+        this.date_of_birth = date_of_birth;
+    }
+    /**
+     * Constructor to build a trusted person
+     * @param lastname
+     * @param surname
+     * @param email
+     */
+    public User(String lastname, String surname, String email) {
+        this.lastname = lastname;
+        this.surname = surname;
+        this.email = email;
+    }
     //Getters
-    public int getId_user() {
+    public Integer getId_user() {
         return id_user;
     }
     public String getLastname() {
@@ -104,8 +135,8 @@ public class User {
     public Roles getRole() {
         return role;
     }
-    public Address getAddress() {
-        return address;
+    public List<Address> getAddresses() {
+        return addresses;
     }
     public User getTrustedPerson() {
         return trustedPerson;
@@ -157,9 +188,6 @@ public class User {
     public void setRole(Roles role) {
         this.role = role;
     }
-    public void setAddress(Address address) {
-        this.address = address;
-    }
     public void setTrustedPerson(User trustedPerson) {
         this.trustedPerson = trustedPerson;
     }
@@ -181,5 +209,12 @@ public class User {
     }
     public void setListTypes(List<ListType> listTypes) {
         this.listTypes = listTypes;
+    }
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+    //Methodes
+    public void addAddress(Address address){
+        addresses.add(address);
     }
 }

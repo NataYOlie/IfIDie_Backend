@@ -23,6 +23,12 @@ public class Cities {
      */
     public Cities() {
     }
+    public Cities(String cityName, String zipcode, Countries country) {
+        this.cityName = cityName;
+        this.zipcode = zipcode;
+        this.country = country;
+    }
+
 
     //Getters
     public int getId_city() {

@@ -1,9 +1,6 @@
 package fr.eql.ai113.ifidieback.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 /**
@@ -21,6 +18,7 @@ public class File {
     public LocalDate removalDate;
     public String comment;
 
+    @OneToOne
     public FileType fileType;
 
 

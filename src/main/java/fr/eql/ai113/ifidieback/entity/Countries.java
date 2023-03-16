@@ -25,7 +25,9 @@ public class Countries {
      */
     public Countries() {
     }
-
+    public Countries(String countryName) {
+        this.countryName = countryName;
+    }
     //Getters
     public int getId_country() {
         return id_country;

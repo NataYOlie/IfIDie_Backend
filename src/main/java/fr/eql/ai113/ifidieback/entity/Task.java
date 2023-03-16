@@ -29,7 +29,7 @@ public class Task {
     @OneToMany
     public List<File> files;
     @JsonIgnore
-    @ManyToMany
+    @ManyToOne
     ListType listType;
 
     /**
