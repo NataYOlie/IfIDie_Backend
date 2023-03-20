@@ -12,10 +12,11 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id_user;
     private String lastname;
     private String surname;
+    private String login;
     private String password;
     private String phone_nb;
     private String email;
@@ -93,6 +94,11 @@ public class User {
         this.email = email;
     }
     //Getters
+
+
+    public String getLogin() {
+        return login;
+    }
     public Integer getId_user() {
         return id_user;
     }
@@ -164,6 +170,10 @@ public class User {
     }
 
     //Setters
+
+    public void setId_user(Integer id_user) {
+        this.id_user = id_user;
+    }
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
@@ -213,7 +223,10 @@ public class User {
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
-    //Methodes
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public void addAddress(Address address){
         addresses.add(address);
     }

@@ -12,12 +12,12 @@ import java.util.*;
 public class Countries {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int id_country;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer id_country;
     public String countryName;
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<Cities> cities;
 
     /**
@@ -29,7 +29,7 @@ public class Countries {
         this.countryName = countryName;
     }
     //Getters
-    public int getId_country() {
+    public Integer getId_country() {
         return id_country;
     }
     public String getCountryName() {
@@ -42,4 +42,10 @@ public class Countries {
     //Setters
 
 
+    public void setId_country(Integer id_country) {
+        this.id_country = id_country;
+    }
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
 }

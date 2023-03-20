@@ -10,8 +10,8 @@ import java.util.Collection;
 public class Cities {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int id_city;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public Integer id_city;
     public String cityName;
     public String zipcode;
 
@@ -31,7 +31,7 @@ public class Cities {
 
 
     //Getters
-    public int getId_city() {
+    public Integer getId_city() {
         return id_city;
     }
     public String getCityName() {

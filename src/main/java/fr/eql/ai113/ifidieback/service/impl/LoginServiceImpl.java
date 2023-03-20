@@ -1,12 +1,14 @@
 package fr.eql.ai113.ifidieback.service.impl;
 
-import fr.eql.ai113.ifidieback.entity.Address;
-import fr.eql.ai113.ifidieback.entity.Cities;
-import fr.eql.ai113.ifidieback.entity.Countries;
-import fr.eql.ai113.ifidieback.entity.User;
+import fr.eql.ai113.ifidieback.entity.*;
+import fr.eql.ai113.ifidieback.repository.CitiesDao;
+import fr.eql.ai113.ifidieback.repository.CountriesDao;
+import fr.eql.ai113.ifidieback.repository.RolesDao;
 import fr.eql.ai113.ifidieback.repository.UserDao;
 import fr.eql.ai113.ifidieback.service.CommunicationService;
 import fr.eql.ai113.ifidieback.service.LoginService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,16 @@ import java.time.LocalDate;
 @Service
 public class LoginServiceImpl implements LoginService {
 
+    Logger logger = LogManager.getLogger();
+
     /** Injected via accessor */
     private UserDao userDao;
+    /** Injected via accessor */
+    private RolesDao rolesDao;
+    /** Injected via accessor */
+    private CitiesDao citiesDao;
+    /** Injected via accessor */
+    private CountriesDao countriesDao;
     /** Injected via accessor */
     private CommunicationService communicationService;
 
@@ -52,16 +62,50 @@ public class LoginServiceImpl implements LoginService {
 
         //Create new User
         User user = new User(lastname,surname,password,phoneNumber, email,birthDate);
+        logger.info("user is created in system : " + user.getSurname() + " " + user.getLastname());
+
+
+        Countries countryAddress = new Countries();
+        countryAddress.setCountryName(country);
+        Cities cityAddress = new Cities();
 
         //Create Address
-        Countries countryAddress = userDao.findCountryByName(country);
-        Cities cityAddress = userDao.findCityByNameAndCountry(city, countryAddress);
+        try {
+            countryAddress = countriesDao.findCountryByName(country).orElse(countryAddress);
+
+        }catch (NullPointerException e){
+            logger.info(countriesDao + " - " + userDao + " - " + rolesDao + " - " + citiesDao);
+            countriesDao.save(countryAddress);
+            logger.info("country " + countryAddress + " is created");
+            //A RETIRER UNE FOIS LA DB OK
+        }
+
+
+        try {
+            cityAddress = citiesDao.findCityByNameAndCountry(city, countryAddress).orElse(null);
+        }catch (NullPointerException e){
+            //A RETIRER UNE FOIS LA DB OK
+            cityAddress = new Cities(city, "ZIP", countryAddress);
+            citiesDao.save(cityAddress);
+            logger.info("city " + cityAddress.cityName + " create in country " + countryAddress);
+        }
+
+
+
+
         Address address = new Address(addressNb, addressStreetName,countryAddress);
         address.setCity(cityAddress);
         user.addAddress(address);
+        logger.info("user address affected");
 
         //Set Role as user (as written in database
-        user.setRole(userDao.findByName("user"));
+
+//A RETIRER UNE FOIS LA DB OK
+        Roles roles = new Roles();
+        roles.setRoleName("user"); //OK Pour TEST
+        rolesDao.save(roles);
+
+        user.setRole(rolesDao.findByName("user").orElse(roles));
 
         //Set creation date
         user.setCreationDate(LocalDate.now());
@@ -69,7 +113,7 @@ public class LoginServiceImpl implements LoginService {
         //Send a validation email
         communicationService.sendMail(email);
 
-        return user;
+        return userDao.save(user);
     }
 
     /**
@@ -94,8 +138,21 @@ public class LoginServiceImpl implements LoginService {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
+
     @Autowired
     public void setCommunicationService(CommunicationService communicationService) {
         this.communicationService = communicationService;
+    }
+    @Autowired
+    public void setRolesDao(RolesDao rolesDao) {
+        this.rolesDao = rolesDao;
+    }
+    @Autowired
+    public void setCitiesDao(CitiesDao citiesDao) {
+        this.citiesDao = citiesDao;
+    }
+    @Autowired
+    public void setCountriesDao(CountriesDao countriesDao) {
+        this.countriesDao = countriesDao;
     }
 }

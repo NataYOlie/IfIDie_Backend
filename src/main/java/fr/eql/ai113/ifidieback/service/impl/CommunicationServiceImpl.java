@@ -1,6 +1,9 @@
 package fr.eql.ai113.ifidieback.service.impl;
 import fr.eql.ai113.ifidieback.service.CommunicationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
+
 import javax.mail.*;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
@@ -11,7 +14,11 @@ import java.util.Properties;
 @Service
 public class CommunicationServiceImpl implements CommunicationService {
 
-    private static final String FROM = "ntramier@gmail.com";
+    Logger logger = LogManager.getLogger();
+
+    private static final String FROM = "ifidie.platform@gmail.com";
+    private static final String USERNAME = "ifidie.platform";
+    private static final String PASSWORD = "dcxdjdapbzyntqqi";
     private static final String SMTP = "smtp.gmail.com";
 
     /**
@@ -31,10 +38,11 @@ public class CommunicationServiceImpl implements CommunicationService {
         properties.put("mail.smtp.port", "465");
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
+
         // Get the Session object.// and pass username and password
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("fromaddress@gmail.com", "*******");
+                return new PasswordAuthentication(USERNAME, PASSWORD);
             }
         });
             // Used to debug SMTP issues
@@ -43,18 +51,22 @@ public class CommunicationServiceImpl implements CommunicationService {
         try {
                 // Create a default MimeMessage object.
                 MimeMessage message = new MimeMessage(session);
-
+                logger.info("Mime");
                 // Set From: header field of the header.
                 message.setFrom(new InternetAddress(FROM));
+                logger.info("header");
 
                 // Set To: header field of the header.
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(emailTo));
+                logger.info("addrecipient");
 
                 // Set Subject: header field
                 message.setSubject("This is the Subject Line!");
+                logger.info("subject");
 
                 // Now set the actual message
                 message.setText("This is actual message");
+                logger.info("set text");
 
                 System.out.println("sending...");
                 // Send message
@@ -64,7 +76,7 @@ public class CommunicationServiceImpl implements CommunicationService {
             } catch (AddressException mex) {
                 mex.printStackTrace();
             } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            logger.info("Message non envoyé : " + e);
         }
 
         return isSent;
