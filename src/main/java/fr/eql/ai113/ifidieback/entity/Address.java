@@ -9,7 +9,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_address;
+    private Integer id_address;
     private int nb;
     private String streetName;
 
@@ -36,7 +36,7 @@ public class Address {
         this.country = country;
     }
     //Getters
-    public int getId_address() {
+    public Integer getId_address() {
         return id_address;
     }
     public int getNb() {

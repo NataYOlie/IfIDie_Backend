@@ -40,8 +40,6 @@ public class Countries {
     }
 
     //Setters
-
-
     public void setId_country(Integer id_country) {
         this.id_country = id_country;
     }

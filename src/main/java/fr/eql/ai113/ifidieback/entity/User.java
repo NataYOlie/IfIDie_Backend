@@ -226,7 +226,9 @@ public class User {
     public void setLogin(String login) {
         this.login = login;
     }
-
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
     public void addAddress(Address address){
         addresses.add(address);
     }

@@ -13,17 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDate;
 
-@SpringBootApplication
-public class IfIDieBackApplication implements CommandLineRunner {
+@SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+public class IfIDieBackApplication {
 
     Logger logger = LogManager.getLogger();
-
-    @Autowired
-    private static LoginService log ;
 
     public static void main(String[] args) {
         SpringApplication.run(IfIDieBackApplication.class, args);
@@ -40,19 +38,19 @@ public class IfIDieBackApplication implements CommandLineRunner {
 
 
 
-    }
-    @Override
-    public void run(String... args) throws Exception {
-
-        try{
-            User user = log.register("Tramier", "Nathalie", "youyou", 11,
-                    "rue du Général Leclerc", "France", "Chevilly-Larue", "0617577460",
-                    "ntramier@gmail.com", LocalDate.of(1979,10,05));
-
-        }catch (NullPointerException e){
-            logger.info("ENCORE UN NULLL", e);
-
-        }
+//    }
+//    @Override
+//    public void run(String... args) throws Exception {
+////
+//        try{
+//            User user = log.register("Tramier", "Nathalie", "youyou", 11,
+//                    "rue du Général Leclerc", "France", "Chevilly-Larue", "0617577460",
+//                    "ntramier@gmail.com", LocalDate.of(1979,10,05));
+//
+//        }catch (NullPointerException e){
+//            logger.info("ENCORE UN NULLL", e);
+//
+//        }
 
 
     }

@@ -45,5 +45,16 @@ public class Cities {
     }
 
     //Setters
-
+    public void setId_city(Integer id_city) {
+        this.id_city = id_city;
+    }
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+    public void setZipcode(String zipcode) {
+        this.zipcode = zipcode;
+    }
+    public void setCountry(Countries country) {
+        this.country = country;
+    }
 }
