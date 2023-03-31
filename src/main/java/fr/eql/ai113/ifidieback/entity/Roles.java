@@ -1,5 +1,7 @@
 package fr.eql.ai113.ifidieback.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +11,7 @@ import javax.persistence.Id;
  * 
  */
 @Entity
-public class Roles {
+public class Roles implements GrantedAuthority {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -33,5 +35,15 @@ public class Roles {
     //Setters
     public void setRoleName(String title) {
         this.roleName = title;
+    }
+
+
+    /**
+     * Methode Granted Authority
+     * @return null
+     */
+    @Override
+    public String getAuthority() {
+        return null;
     }
 }

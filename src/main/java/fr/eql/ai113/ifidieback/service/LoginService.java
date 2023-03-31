@@ -6,7 +6,8 @@ import java.time.LocalDate;
 
 public interface LoginService {
 
-    User authenticate(String login, String password);
+    //    User authenticate(String login, String password); // JE COMMENTE CAR JE REMPLACE PAR SECURITY
+
     User register(String lastname, String surname, String password, int addressNb, String addressStreetName,
                   String country, String city, String phoneNumber, String email, LocalDate birthDate);
     User trustedPersonAffect(User client, String name, String surname, String email);

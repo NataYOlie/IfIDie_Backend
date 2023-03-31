@@ -31,16 +31,16 @@ public class LoginServiceImpl implements LoginService {
     private CommunicationService communicationService;
 
     //Methods
-    /**
-     *This method is use for authentification of a known User
-     * @param login String
-     * @param password String
-     * @return User
-     */
-    @Override
-    public User authenticate(String login, String password) {
-        return userDao.findByLoginAndPassword(login, password);
-    }
+//    /**
+//     *This method is use for authentification of a known User
+//     * @param login String
+//     * @param password String
+//     * @return User
+//     */
+//    @Override
+//    public User authenticate(String login, String password) {
+//        return userDao.findByLoginAndPassword(login, password);
+//    }
 
     /**
      * This method is used to register, it creates a User and its address.
@@ -105,7 +105,7 @@ public class LoginServiceImpl implements LoginService {
         roles.setRoleName("user"); //OK Pour TEST
         rolesDao.save(roles);
 
-        user.setRole(rolesDao.findByName("user").orElse(roles));
+//        user.setRole(rolesDao.findByName("user").orElse(roles)); ///// MATCH PAS AVEC SECURITY
 
         //Set creation date
         user.setCreationDate(LocalDate.now());
