@@ -1,11 +1,20 @@
 package fr.eql.ai113.ifidieback.service.impl;
 
+import fr.eql.ai113.ifidieback.entity.Address;
+import fr.eql.ai113.ifidieback.entity.Cities;
+import fr.eql.ai113.ifidieback.entity.Countries;
 import fr.eql.ai113.ifidieback.entity.User;
+import fr.eql.ai113.ifidieback.repository.CitiesDao;
+import fr.eql.ai113.ifidieback.repository.CountriesDao;
+import fr.eql.ai113.ifidieback.repository.RolesDao;
 import fr.eql.ai113.ifidieback.repository.UserDao;
+import fr.eql.ai113.ifidieback.service.CommunicationService;
 import fr.eql.ai113.ifidieback.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +29,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -27,11 +37,20 @@ import java.util.Date;
 @Configuration //On le met pour aider Spring à trouver le @Bean du PasswordEncoder
 public class UserServiceImpl implements UserService {
 
-    /** Injectée par le setter */
-    private UserDao userDao;
+    Logger logger = LogManager.getLogger();
 
     /** Injectée par le setter */
+    private UserDao userDao;
+    /** Injectée par le setter */
     private AuthenticationManager authenticationManager;
+    /** Injectée par le setter */
+    private CommunicationService communicationService;
+    /** Injected via accessor */
+    private RolesDao rolesDao;
+    /** Injected via accessor */
+    private CitiesDao citiesDao;
+    /** Injected via accessor */
+    private CountriesDao countriesDao;
 
     //Peut être inutile dis Axel
     private final String signingKey;
@@ -84,8 +103,64 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder().encode(password)); // Ici on garantit le chiffrage du mdp du début à la fin
         user.setLastname(lastname);
         user.setSurname(surname);
+
+
+        Countries countryAddress = new Countries();
+        countryAddress.setCountryName("FRANCE");
+        Cities cityAddress = new Cities();
+
+        //Create Address
+        try {
+            countryAddress = countriesDao.findCountryByName(country).orElse(countryAddress);
+
+        }catch (NullPointerException e){
+            logger.info(countriesDao + " - " + userDao + " - " + rolesDao + " - " + citiesDao);
+            countriesDao.save(countryAddress);
+            logger.info("country " + countryAddress + " is created");
+            //A RETIRER UNE FOIS LA DB OK
+        }
+
+        try {
+            cityAddress = citiesDao.findCityByNameAndCountry(city, countryAddress).orElse(null);
+        }catch (NullPointerException e){
+            //A RETIRER UNE FOIS LA DB OK
+            cityAddress = new Cities(city, "ZIP", countryAddress);
+            citiesDao.save(cityAddress);
+            logger.info("city " + cityAddress.cityName + " create in country " + countryAddress);
+        }
+
+        Address address = new Address(addressNb, addressStreetName,countryAddress);
+        address.setCity(cityAddress);
+        user.addAddress(address);
+        logger.info("user address affected");
+
+        //ROLE AFFECTION
+
+
+
+        //Set creation date
+        user.setCreationDate(LocalDate.now());
+
+        //Send a validation email
+        communicationService.sendMail(user.getEmail());
         userDao.save(user);
         return user; // user implements Serializable comme UserDetail donc ça marche
+    }
+
+    /**
+     *
+     * @param client is a User to which the Trusted Person is related by this app
+     * @param name String > name of the Trusted Person
+     * @param surname String > surname of the Trusted Person
+     * @param email String > email of the Trusted Person / should be check in front
+     * @return The trusted person, also a User
+     */
+    @Override
+    public User trustedPersonAffect(User client, String name, String surname, String email) {
+        User trustedPerson = new User(name, surname, email);
+        client.setTrustedPerson(trustedPerson);
+
+        return trustedPerson;
     }
 
     /**
@@ -143,10 +218,24 @@ public class UserServiceImpl implements UserService {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
-
-
     @Autowired
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+    }
+    @Autowired
+    public void setCommunicationService(CommunicationService communicationService) {
+        this.communicationService = communicationService;
+    }
+    @Autowired
+    public void setRolesDao(RolesDao rolesDao) {
+        this.rolesDao = rolesDao;
+    }
+    @Autowired
+    public void setCitiesDao(CitiesDao citiesDao) {
+        this.citiesDao = citiesDao;
+    }
+    @Autowired
+    public void setCountriesDao(CountriesDao countriesDao) {
+        this.countriesDao = countriesDao;
     }
 }
