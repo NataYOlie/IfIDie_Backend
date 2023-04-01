@@ -1,23 +1,31 @@
 package fr.eql.ai113.ifidieback.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * POJO for the User
  */
 @Entity
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id_user;
     private String lastname;
     private String surname;
+
+    @JsonIgnore
+    @Column(unique = true) //permet de changer le nom de la colonne mais aussi de faire du contrôle
     private String login;
+    @JsonIgnore
     private String password;
+
     private String phone_nb;
     private String email;
     private LocalDate creationDate;
@@ -28,8 +36,13 @@ public class User {
     private LocalDate deathDate;
     private String causeOfDeath;
 
-    @OneToOne
-    private Roles role ;
+//    @OneToOne
+//    private Roles role ;
+
+    //Security
+    @ManyToMany(fetch = FetchType.EAGER) // on ne peut pas mettre 2 attributs du même objet en Eager.
+    private Collection<Roles> roles;
+
     @JsonIgnore
     @OneToMany
     private List<Address> addresses;
@@ -60,6 +73,34 @@ public class User {
 
 
     /**
+     * Methods User Details
+     */
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+    @Override
+    public String getUsername() {
+        return login;
+    } //Est-ce que c'est ça ?
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    /**
      * Default constructor
      */
     public User() {
@@ -67,12 +108,12 @@ public class User {
 
     /**
      * Constructor use to register a basic user
-     * @param lastname
-     * @param surname
-     * @param password
-     * @param phone_nb
-     * @param email
-     * @param date_of_birth
+     * @param lastname String for lastname
+     * @param surname String for surname
+     * @param password String for lastname
+     * @param phone_nb String phonenb must be "00-00-00-00-00"
+     * @param email {toto}.{toto}.{toto}
+     * @param date_of_birth must be a Date
      */
     public User(String lastname, String surname, String password, String phone_nb, String email, LocalDate date_of_birth) {
         this.lastname = lastname;
@@ -94,8 +135,6 @@ public class User {
         this.email = email;
     }
     //Getters
-
-
     public String getLogin() {
         return login;
     }
@@ -138,9 +177,9 @@ public class User {
     public String getCauseOfDeath() {
         return causeOfDeath;
     }
-    public Roles getRole() {
-        return role;
-    }
+//    public Roles getRole() {
+//        return role;
+//    }
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -170,7 +209,6 @@ public class User {
     }
 
     //Setters
-
     public void setId_user(Integer id_user) {
         this.id_user = id_user;
     }
@@ -195,9 +233,9 @@ public class User {
     public void setCauseOfDeath(String causeOfDeath) {
         this.causeOfDeath = causeOfDeath;
     }
-    public void setRole(Roles role) {
-        this.role = role;
-    }
+//    public void setRole(Roles role) {
+//        this.role = role;
+//    }
     public void setTrustedPerson(User trustedPerson) {
         this.trustedPerson = trustedPerson;
     }
