@@ -178,9 +178,9 @@ public class User implements UserDetails {
     public String getCauseOfDeath() {
         return causeOfDeath;
     }
-//    public Roles getRole() {
-//        return role;
-//    }
+    public Collection<Roles> getRoles() {
+        return roles;
+    }
     public List<Address> getAddresses() {
         return addresses;
     }
@@ -234,9 +234,9 @@ public class User implements UserDetails {
     public void setCauseOfDeath(String causeOfDeath) {
         this.causeOfDeath = causeOfDeath;
     }
-//    public void setRole(Roles role) {
-//        this.role = role;
-//    }
+    public void setRoles(Collection<Roles> roles) {
+        this.roles = roles;
+    }
     public void setTrustedPerson(User trustedPerson) {
         this.trustedPerson = trustedPerson;
     }

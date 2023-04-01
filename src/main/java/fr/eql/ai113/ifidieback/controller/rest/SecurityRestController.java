@@ -58,6 +58,15 @@ public class SecurityRestController {
         return ResponseEntity.ok(new AuthResponse(user, token)); //On renvoie la réponse validée
     }
 
+    @PostMapping("/register/full")
+    public ResponseEntity<AuthResponse> registerFull(@RequestBody AuthRequest requestDto) throws AccountExistException {
+        UserDetails user = userService.saveFull(requestDto.getUsername(), requestDto.getPassword(),
+                requestDto.getLastname(), requestDto.getSurname(), requestDto.getAddressNb(), requestDto.getAddressStreetName(),
+                requestDto.getCountry(), requestDto.getCity(), requestDto.getPhoneNumber(), requestDto.getBirthDate());
+        String token = userService.generateJWTforUser(user);
+        return ResponseEntity.ok(new AuthResponse(user, token)); //On renvoie la réponse validée
+    }
+
 
     //Setter
     @Autowired

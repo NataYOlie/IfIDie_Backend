@@ -36,8 +36,9 @@ public class Roles implements GrantedAuthority {
     public void setRoleName(String title) {
         this.roleName = title;
     }
-
-
+    public void setId_role(Integer id_role) {
+        this.id_role = id_role;
+    }
     /**
      * Methode Granted Authority
      * @return null

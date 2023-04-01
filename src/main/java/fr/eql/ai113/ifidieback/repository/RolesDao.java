@@ -10,6 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface RolesDao extends JpaRepository<Roles, Integer> {
-    @Query("SELECT r FROM Roles r where r.roleName = :name")
-    Optional<Roles> findByName(@Param("name") String roleName);
+//    @Query("SELECT r FROM Roles r where r.roleName = :name")
+    Roles findByRoleName(String roleName);
 }

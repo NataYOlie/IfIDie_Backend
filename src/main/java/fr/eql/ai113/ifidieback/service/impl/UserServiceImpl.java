@@ -1,9 +1,6 @@
 package fr.eql.ai113.ifidieback.service.impl;
 
-import fr.eql.ai113.ifidieback.entity.Address;
-import fr.eql.ai113.ifidieback.entity.Cities;
-import fr.eql.ai113.ifidieback.entity.Countries;
-import fr.eql.ai113.ifidieback.entity.User;
+import fr.eql.ai113.ifidieback.entity.*;
 import fr.eql.ai113.ifidieback.repository.CitiesDao;
 import fr.eql.ai113.ifidieback.repository.CountriesDao;
 import fr.eql.ai113.ifidieback.repository.RolesDao;
@@ -30,7 +27,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -91,7 +91,15 @@ public class UserServiceImpl implements UserService {
         return authenticationManager.authenticate(authentication);
     }
 
-    // REGISTER A REDIGER
+    /**
+     * This method is a basic Register for USer who wants to save lists, life calendar and/or WebFindMeSearch
+     * @param username String is email
+     * @param password String
+     * @param lastname String
+     * @param surname String
+     * @return user (UserDetails)
+     * @throws AccountExistException if accounts allready exists
+     */
     @Override
     public UserDetails save(String username, String password, String lastname, String surname) throws AccountExistException {
         //Garde de vérif qu'on a pas déjà un login identique
@@ -100,10 +108,52 @@ public class UserServiceImpl implements UserService {
         }
         User user = new User(); //Constructeur vide
         user.setEmail(username); // Username is Email
+        user.setLogin(username);
         user.setPassword(passwordEncoder().encode(password)); // Ici on garantit le chiffrage du mdp du début à la fin
         user.setLastname(lastname);
         user.setSurname(surname);
 
+        //ROLE AFFECTION = ROLE_USER
+        Roles role = rolesDao.findByRoleName("ROLE_USER");
+        Collection<Roles> roles = new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
+
+        //Set creation date
+        user.setCreationDate(LocalDate.now());
+
+        //Send a validation email
+        communicationService.sendMail(user.getEmail());
+        userDao.save(user);
+        return user; // user implements Serializable comme UserDetail donc ça marche
+    }
+
+    /**
+     * This method is a full register for a client of Post Mortem Letters, Cenotaphe or Time Capsule
+     * @param username String - is email
+     * @param password String
+     * @param lastname String
+     * @param surname String
+     * @param country String
+     * @param city String
+     * @param phoneNumber String
+     * @param birthDate LcalDate
+     * @return user (UserDetails)
+     * @throws AccountExistException is accounts allready exists
+     */
+    @Override
+    public UserDetails saveFull(String username, String password, String lastname, String surname, int addressNb, String addressStreetName,
+                                String country, String city, String phoneNumber, LocalDate birthDate) throws AccountExistException {
+        //Garde de vérif qu'on a pas déjà un login identique
+        if (userDao.findByLogin(username) != null){
+            throw new AccountExistException();
+        }
+        User user = new User(); //Constructeur vide
+        user.setEmail(username); // Username is Email
+        user.setLogin(username);
+        user.setPassword(passwordEncoder().encode(password)); // Ici on garantit le chiffrage du mdp du début à la fin
+        user.setLastname(lastname);
+        user.setSurname(surname);
 
         Countries countryAddress = new Countries();
         countryAddress.setCountryName("FRANCE");
@@ -124,18 +174,22 @@ public class UserServiceImpl implements UserService {
             cityAddress = citiesDao.findCityByNameAndCountry(city, countryAddress).orElse(null);
         }catch (NullPointerException e){
             //A RETIRER UNE FOIS LA DB OK
-            cityAddress = new Cities(city, "ZIP", countryAddress);
+            cityAddress = new Cities(city, "75000", countryAddress);
             citiesDao.save(cityAddress);
             logger.info("city " + cityAddress.cityName + " create in country " + countryAddress);
         }
 
         Address address = new Address(addressNb, addressStreetName,countryAddress);
         address.setCity(cityAddress);
-        user.addAddress(address);
+        List<Address> addresses = new ArrayList<>();
+        user.setAddresses(addresses);
         logger.info("user address affected");
 
-        //ROLE AFFECTION
-
+        //ROLE AFFECTION = ROLE_USER
+        Roles role = rolesDao.findByRoleName("ROLE_USER");
+        Collection<Roles> roles = new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
 
 
         //Set creation date
@@ -150,18 +204,20 @@ public class UserServiceImpl implements UserService {
     /**
      *
      * @param client is a User to which the Trusted Person is related by this app
-     * @param name String > name of the Trusted Person
-     * @param surname String > surname of the Trusted Person
-     * @param email String > email of the Trusted Person / should be check in front
+     * @param username String > email of the Trusted Person
      * @return The trusted person, also a User
      */
     @Override
-    public User trustedPersonAffect(User client, String name, String surname, String email) {
-        User trustedPerson = new User(name, surname, email);
+    public User trustedPersonAffect(User client, String username) throws AccountDoesNotExistException {
+        if (userDao.findByLogin(username) == null){
+            throw new AccountDoesNotExistException();
+        }
+        User trustedPerson = userDao.findByLogin(username);
         client.setTrustedPerson(trustedPerson);
 
         return trustedPerson;
     }
+
 
     /**
      * This methods set a session token for connected user which last one hour

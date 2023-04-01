@@ -28,7 +28,24 @@ public class AuthRequest {
     public String getSurname() {
         return surname;
     }
-
+    public int getAddressNb() {
+        return addressNb;
+    }
+    public String getAddressStreetName() {
+        return addressStreetName;
+    }
+    public String getCountry() {
+        return country;
+    }
+    public String getCity() {
+        return city;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
     /// Setters ///
     public void setUsername(String username) {
         this.username = username;
