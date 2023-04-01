@@ -74,15 +74,16 @@ public class UserServiceImpl implements UserService {
 
     // REGISTER A REDIGER
     @Override
-    public UserDetails save(String username, String password) throws AccountExistException {
+    public UserDetails save(String username, String password, String lastname, String surname) throws AccountExistException {
         //Garde de vérif qu'on a pas déjà un login identique
         if (userDao.findByLogin(username) != null){
             throw new AccountExistException();
         }
-
         User user = new User(); //Constructeur vide
-        user.setLogin(username);
+        user.setEmail(username); // Username is Email
         user.setPassword(passwordEncoder().encode(password)); // Ici on garantit le chiffrage du mdp du début à la fin
+        user.setLastname(lastname);
+        user.setSurname(surname);
         userDao.save(user);
         return user; // user implements Serializable comme UserDetail donc ça marche
     }
@@ -100,23 +101,39 @@ public class UserServiceImpl implements UserService {
                 .signWith(SignatureAlgorithm.HS512, signingKey).compact();
     }
 
+    /**
+     * This methods returns a username from a token
+     * @param token security token
+     * @return String username
+     */
     //METHODE PAS OVERRIDE
     private String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(token).getBody();
         return claims.getSubject();
     }
 
+    /**
+     * This methods returns a User (UserDeatails) from a jwt (session token)
+     * @param jwt (session token)
+     * @return user (UserDetails)
+     */
     @Override
     public UserDetails getUserFromJWT(String jwt) {
         String username = getUsernameFromToken(jwt);
         return loadUserByUsername(username);
     }
-
+    /**
+     * This method is implemented by the interface UserService implemented by the interface UserDetails.
+     * It loads user with the dao (JPA methods) from username.
+     * @param username String
+     * @return A User
+     * @throws UsernameNotFoundException is not found
+     */
     @Override //Méthode implémentée de l'interface implémentée par l'interface UserDetails
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userDao.findByLogin(username);
         if (user == null) {
-            throw new UsernameNotFoundException("Le propriétaire n'a pas été trouvé.");
+            throw new UsernameNotFoundException("L'utilisateur n'a pas été trouvé.");
         }
         return user;
     }
@@ -126,6 +143,7 @@ public class UserServiceImpl implements UserService {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
+
 
     @Autowired
     public void setAuthenticationManager(AuthenticationManager authenticationManager) {

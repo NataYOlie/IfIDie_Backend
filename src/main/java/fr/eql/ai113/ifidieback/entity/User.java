@@ -40,7 +40,8 @@ public class User implements UserDetails {
 //    private Roles role ;
 
     //Security
-    @ManyToMany(fetch = FetchType.EAGER) // on ne peut pas mettre 2 attributs du même objet en Eager.
+    @ManyToMany(fetch = FetchType.EAGER) // on ne peut pas mettre 2 attributs du même objet en Eager. si il y avait une
+    // collection dans la collection et que cette collection était en eager aussi ça ferait une boucle infinie
     private Collection<Roles> roles;
 
     @JsonIgnore
@@ -112,8 +113,8 @@ public class User implements UserDetails {
      * @param surname String for surname
      * @param password String for lastname
      * @param phone_nb String phonenb must be "00-00-00-00-00"
-     * @param email {toto}.{toto}.{toto}
-     * @param date_of_birth must be a Date
+     * @param email {toto}@{toto}.{toto}
+     * @param date_of_birth LocalDate (YYYY-MM-DD)
      */
     public User(String lastname, String surname, String password, String phone_nb, String email, LocalDate date_of_birth) {
         this.lastname = lastname;

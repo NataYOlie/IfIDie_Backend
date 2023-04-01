@@ -1,9 +1,19 @@
 package fr.eql.ai113.ifidieback.entity.dto;
 
+import java.time.LocalDate;
+
 public class AuthRequest {
 
-    private String username;
+    private String username; // Is email
     private String password;
+    String lastname;
+    String surname;
+    int addressNb;
+    String addressStreetName;
+    String country;
+    String city;
+    String phoneNumber;
+    LocalDate birthDate;
 
     /// Getters ///
     public String getUsername() {
@@ -11,6 +21,12 @@ public class AuthRequest {
     }
     public String getPassword() {
         return password;
+    }
+    public String getLastname() {
+        return lastname;
+    }
+    public String getSurname() {
+        return surname;
     }
 
     /// Setters ///

@@ -90,9 +90,6 @@ public class LoginServiceImpl implements LoginService {
             logger.info("city " + cityAddress.cityName + " create in country " + countryAddress);
         }
 
-
-
-
         Address address = new Address(addressNb, addressStreetName,countryAddress);
         address.setCity(cityAddress);
         user.addAddress(address);

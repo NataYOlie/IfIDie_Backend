@@ -12,14 +12,14 @@ public class LoginRestController {
 
     /**injecté via le setter */
     LoginService loginService;
+//
+//    @PostMapping("/register")
+//    public User register (@RequestBody UserDto userDto){return loginService.register(userDto);}
 
-    @PostMapping("/register")
-    public User register (@RequestBody UserDto userDto){return loginService.register(userDto);}
-
-    @GetMapping("/{login}/{password}")
-    public User authenticate (@PathVariable String login, @PathVariable String password){
-        return loginService.authenticate(login, password);
-    }
+//    @GetMapping("/{login}/{password}")
+//    public User authenticate (@PathVariable String login, @PathVariable String password){
+//        return loginService.authenticate(login, password);
+//    }
 
     ///Setters
     @Autowired
