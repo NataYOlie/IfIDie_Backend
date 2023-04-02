@@ -7,23 +7,25 @@ import fr.eql.ai113.ifidieback.entity.dto.UserDto;
 import fr.eql.ai113.ifidieback.service.UserService;
 import fr.eql.ai113.ifidieback.service.impl.AccountExistException;
 import fr.eql.ai113.ifidieback.service.impl.UnauthorizedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("security")
+@CrossOrigin(origins="${front.url}")
 public class SecurityRestController {
 
     /** injecté par le setter */
     UserService userService ;
+
+    Logger logger = LogManager.getLogger();
 
 
     ///Methode d'autentification
@@ -66,7 +68,6 @@ public class SecurityRestController {
         String token = userService.generateJWTforUser(user);
         return ResponseEntity.ok(new AuthResponse(user, token)); //On renvoie la réponse validée
     }
-
 
     //Setter
     @Autowired

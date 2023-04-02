@@ -1,22 +1,10 @@
 package fr.eql.ai113.ifidieback;
 
-import fr.eql.ai113.ifidieback.entity.User;
-import fr.eql.ai113.ifidieback.repository.CitiesDao;
-import fr.eql.ai113.ifidieback.repository.UserDao;
-import fr.eql.ai113.ifidieback.service.CommunicationService;
-import fr.eql.ai113.ifidieback.service.LoginService;
-import fr.eql.ai113.ifidieback.service.impl.CommunicationServiceImpl;
-import fr.eql.ai113.ifidieback.service.impl.LoginServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import org.springframework.context.annotation.Bean;
-
-import java.time.LocalDate;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class IfIDieBackApplication {
