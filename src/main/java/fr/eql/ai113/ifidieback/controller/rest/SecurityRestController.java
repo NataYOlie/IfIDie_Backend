@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("security")
-@CrossOrigin(origins="${front.url}")
+@CrossOrigin(origins ="${front.url}")
 public class SecurityRestController {
 
     /** injecté par le setter */
