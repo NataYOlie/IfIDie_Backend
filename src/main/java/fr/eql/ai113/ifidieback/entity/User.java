@@ -36,9 +36,6 @@ public class User implements UserDetails {
     private LocalDate deathDate;
     private String causeOfDeath;
 
-//    @OneToOne
-//    private Roles role ;
-
     //Security
     @ManyToMany(fetch = FetchType.EAGER) // on ne peut pas mettre 2 attributs du même objet en Eager. si il y avait une
     // collection dans la collection et que cette collection était en eager aussi ça ferait une boucle infinie
@@ -71,6 +68,9 @@ public class User implements UserDetails {
     @JsonIgnore
     @OneToMany
     List<ListType> listTypes;
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Task> tasks;
 
 
     /**

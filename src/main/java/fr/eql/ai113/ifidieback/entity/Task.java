@@ -14,13 +14,19 @@ public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int id_task;
-    public String wording;
-    public String comment;
+    public Integer id_task;
+    public String subtype;
+    public String header;
+    public String description;
+    public String externalLink;
     public LocalDate validationDate;
     public LocalDate previsionalDate;
     public String taskColor;
     public boolean visible;
+
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "id_user")
+    public User user;
 
     @JsonIgnore
     @OneToMany
@@ -39,14 +45,20 @@ public class Task {
     }
 
     //Getters
-    public int getId_task() {
+    public Integer getId_task() {
         return id_task;
     }
-    public String getWording() {
-        return wording;
+    public String getSubtype() {
+        return subtype;
     }
-    public String getComment() {
-        return comment;
+    public String getHeader() {
+        return header;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getExternalLink() {
+        return externalLink;
     }
     public LocalDate getValidationDate() {
         return validationDate;
@@ -71,11 +83,17 @@ public class Task {
     }
 
     //Setters
-    public void setWording(String wording) {
-        this.wording = wording;
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setHeader(String header) {
+        this.header = header;
+    }
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setExternalLink(String externalLink) {
+        this.externalLink = externalLink;
     }
     public void setValidationDate(LocalDate validationDate) {
         this.validationDate = validationDate;
