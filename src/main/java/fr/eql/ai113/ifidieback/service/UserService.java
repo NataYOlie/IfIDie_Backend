@@ -21,6 +21,7 @@ public interface UserService extends UserDetailsService {
 
     String generateJWTforUser (UserDetails user);
     UserDetails getUserFromJWT (String jwt);
+    UserDetails getUserById (Integer userId);
 
 
 

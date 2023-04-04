@@ -37,14 +37,26 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
+     * This method update the task in database
+     * @param taskId a Task
+     * @return the updated task
+     */
+    @Override
+    public Task updateTask(Integer taskId) {
+        Task task = taskDao.findById_task(taskId);
+        taskDao.save(task);
+        return task;
+    }
+
+    /**
      * This method saves the task in database
      * @param task a new Task
      * @return the saved task
      */
     @Override
-    public Task save(Task task) {
-        taskDao.save(task);
-        return task;
+    public Task saveTask(Task task) {
+        System.out.println("youyou");
+        return taskDao.save(task);
     }
 
     //Getter

@@ -9,5 +9,6 @@ public interface TaskService {
 
     List<Task> getDefaultStepTasks(String subtype, Integer id_user);
     UserDetails saveMyStepTasks(UserDetails connectedUser, List<Task> myStepTasks);
-    Task save(Task task);
+    Task updateTask(Integer taskId);
+    Task saveTask(Task task);
 }

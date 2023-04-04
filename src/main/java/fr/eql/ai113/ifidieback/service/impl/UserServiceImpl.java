@@ -253,6 +253,10 @@ public class UserServiceImpl implements UserService {
         String username = getUsernameFromToken(jwt);
         return loadUserByUsername(username);
     }
+    @Override
+    public UserDetails getUserById(Integer userId) {
+        return userDao.findByUserId(userId);
+    }
     /**
      * This method is implemented by the interface UserService implemented by the interface UserDetails.
      * It loads user with the dao (JPA methods) from username.

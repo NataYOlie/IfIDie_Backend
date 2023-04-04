@@ -22,16 +22,11 @@ public class TaskRestController {
         return taskService.getDefaultStepTasks(subtype, id);
     }
 
-    @PostMapping("/{id}/save")
-    private Task saveTask(@PathVariable Integer id, @PathVariable Task task){
-
-        return taskService.save(task);
+    @PutMapping("/{id}/save")
+    private Task saveTask(@PathVariable Integer taskId){
+        return taskService.updateTask(taskId);
     }
-    @PostMapping("/{toto}")
-    private String toto(@PathVariable String toto){
 
-        return toto;
-    }
 
     //Setter
     @Autowired

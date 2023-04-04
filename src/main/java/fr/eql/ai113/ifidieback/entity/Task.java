@@ -22,7 +22,7 @@ public class Task {
     public LocalDate validationDate;
     public LocalDate previsionalDate;
     public String taskColor;
-    public boolean visible;
+    public boolean visible = true;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id_user")
@@ -106,5 +106,11 @@ public class Task {
     }
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public void setPeriods(List<Period> periods) {
+        this.periods = periods;
     }
 }
