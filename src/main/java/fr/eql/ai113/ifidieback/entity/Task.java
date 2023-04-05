@@ -23,6 +23,7 @@ public class Task {
     public LocalDate previsionalDate;
     public String taskColor;
     public boolean visible = true;
+    public boolean defaultTask = false;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id_user")
@@ -34,7 +35,7 @@ public class Task {
     @JsonIgnore
     @OneToMany
     public List<File> files;
-    @JsonIgnore
+
     @ManyToOne
     ListType listType;
 
@@ -81,7 +82,12 @@ public class Task {
     public ListType getListType() {
         return listType;
     }
-
+    public User getUser() {
+        return user;
+    }
+    public boolean isDefaultTask() {
+        return defaultTask;
+    }
     //Setters
     public void setSubtype(String subtype) {
         this.subtype = subtype;
@@ -112,5 +118,17 @@ public class Task {
     }
     public void setPeriods(List<Period> periods) {
         this.periods = periods;
+    }
+    public void setId_task(Integer id_task) {
+        this.id_task = id_task;
+    }
+    public void setFiles(List<File> files) {
+        this.files = files;
+    }
+    public void setListType(ListType listType) {
+        this.listType = listType;
+    }
+    public void setDefaultTask(boolean defaultTask) {
+        this.defaultTask = defaultTask;
     }
 }

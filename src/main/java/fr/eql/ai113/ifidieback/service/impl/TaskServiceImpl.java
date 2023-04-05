@@ -1,6 +1,8 @@
 package fr.eql.ai113.ifidieback.service.impl;
 
+import fr.eql.ai113.ifidieback.entity.ListType;
 import fr.eql.ai113.ifidieback.entity.Task;
+import fr.eql.ai113.ifidieback.repository.ListTypeDao;
 import fr.eql.ai113.ifidieback.repository.TaskDao;
 import fr.eql.ai113.ifidieback.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +18,19 @@ public class TaskServiceImpl implements TaskService {
      * Injecté par le setter
      */
     private TaskDao taskDao ;
+    /**
+     * Injecté par le setter
+     */
+    private ListTypeDao listTypeDao;
 
 
     /**
      * This method returns the default List of StepListTasks
-     * @param subtype is the subtype (here supposed to be "default")
-     * @param id_user connectedUser (here supposed to be someone with ROLE_ADMIN role)
      * @return a list of tasks.
      */
     @Override
-    public List<Task> getDefaultStepTasks(String subtype, Integer id_user) {
-        List<Task> defaultStepTasks = taskDao.findDefaultStepTasksBySubtype(subtype, id_user);
+    public List<Task> getDefaultStepTasks() {
+        List<Task> defaultStepTasks = taskDao.findDefaultStepTasksBySubtype();
         return defaultStepTasks;
     }
 
@@ -54,8 +58,11 @@ public class TaskServiceImpl implements TaskService {
      * @return the saved task
      */
     @Override
-    public Task saveTask(Task task) {
+    public Task saveTask(Task task, String listType) {
         System.out.println("youyou");
+         ListType listTypeSave = listTypeDao.findByList_name(listType);
+
+         task.setListType(listTypeSave);
         return taskDao.save(task);
     }
 
@@ -68,5 +75,9 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     public void setTaskDao(TaskDao taskDao) {
         this.taskDao = taskDao;
+    }
+    @Autowired
+    public void setListTypeDao(ListTypeDao listTypeDao) {
+        this.listTypeDao = listTypeDao;
     }
 }

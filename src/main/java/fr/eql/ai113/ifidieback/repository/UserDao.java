@@ -12,6 +12,6 @@ public interface UserDao extends JpaRepository<User, Integer> {
     User findByLoginAndPassword(String login, String password);
     User findByLogin(String login);
 
-    @Query("select u from User u where u.id_user = :userId")
-    UserDetails findByUserId(@Param("userId") Integer userId);
+    @Query("SELECT u FROM User u WHERE u.id_user = :userId")
+    User findByUserId(@Param("userId") Integer userId);
 }

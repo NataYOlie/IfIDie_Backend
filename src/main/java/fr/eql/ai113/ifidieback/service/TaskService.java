@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface TaskService {
 
-    List<Task> getDefaultStepTasks(String subtype, Integer id_user);
+    List<Task> getDefaultStepTasks();
     UserDetails saveMyStepTasks(UserDetails connectedUser, List<Task> myStepTasks);
     Task updateTask(Integer taskId);
-    Task saveTask(Task task);
+    Task saveTask(Task task, String listType);
 }

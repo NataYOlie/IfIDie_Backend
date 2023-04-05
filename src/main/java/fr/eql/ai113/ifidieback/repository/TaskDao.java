@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface TaskDao  extends JpaRepository<Task, Integer> {
 
-    @Query("select t from Task t join ListType lt join User u where t.subtype = :subtype and lt.list_name = 'StepList' and t.user.id_user = :idUser")
-    List<Task> findDefaultStepTasksBySubtype(@Param("subtype") String subtype, @Param("idUser")Integer idUser);
+    @Query("select t from Task t where t.defaultTask = true and t.listType.list_name = 'StepList'")
+    List<Task> findDefaultStepTasksBySubtype();
 
     @Query("select t from Task t where t.id_task = :taskId")
     Task findById_task(@Param("taskId") Integer taskId);

@@ -19,7 +19,7 @@ public class TaskRestController {
 
     @GetMapping("/steplist/{id}/{subtype}")
     private List<Task> getDefaultStepTasks (@PathVariable Integer id, @PathVariable String subtype){
-        return taskService.getDefaultStepTasks(subtype, id);
+        return taskService.getDefaultStepTasks();
     }
 
     @PutMapping("/{id}/save")

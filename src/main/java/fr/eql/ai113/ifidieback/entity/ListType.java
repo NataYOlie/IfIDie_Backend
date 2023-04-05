@@ -13,7 +13,7 @@ public class ListType {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
-    public int id_task_type;
+    public Integer id_task_type;
     public String list_name;
 
     @JsonIgnore
