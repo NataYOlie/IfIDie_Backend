@@ -30,6 +30,11 @@ public class AdminBoardController {
         return taskService.saveTask(task, listType);
     }
 
+    @PutMapping("/updatetask")
+    public Task updateTask(@RequestBody Task task){
+        return taskService.updateTask(task);
+    }
+
 
     //Setter
     @Autowired

@@ -40,14 +40,14 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 
+
     /**
      * This method update the task in database
-     * @param taskId a Task
+     * @param task a Task
      * @return the updated task
      */
     @Override
-    public Task updateTask(Integer taskId) {
-        Task task = taskDao.findById_task(taskId);
+    public Task updateTask(Task task) {
         taskDao.save(task);
         return task;
     }
@@ -61,7 +61,6 @@ public class TaskServiceImpl implements TaskService {
     public Task saveTask(Task task, String listType) {
         System.out.println("youyou");
          ListType listTypeSave = listTypeDao.findByList_name(listType);
-
          task.setListType(listTypeSave);
         return taskDao.save(task);
     }

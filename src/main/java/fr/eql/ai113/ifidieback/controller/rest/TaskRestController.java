@@ -22,9 +22,9 @@ public class TaskRestController {
         return taskService.getDefaultStepTasks();
     }
 
-    @PutMapping("/{id}/save")
-    private Task saveTask(@PathVariable Integer taskId){
-        return taskService.updateTask(taskId);
+    @PostMapping("/{id}/save")
+    private Task saveTask(@PathVariable Task task){
+        return taskService.updateTask(task);
     }
 
 
