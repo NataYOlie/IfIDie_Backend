@@ -11,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("adminboard")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "${front.url}")
 public class AdminBoardController {
 
     public TaskService taskService;

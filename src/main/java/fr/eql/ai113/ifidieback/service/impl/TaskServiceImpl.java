@@ -2,6 +2,7 @@ package fr.eql.ai113.ifidieback.service.impl;
 
 import fr.eql.ai113.ifidieback.entity.ListType;
 import fr.eql.ai113.ifidieback.entity.Task;
+import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.repository.ListTypeDao;
 import fr.eql.ai113.ifidieback.repository.TaskDao;
 import fr.eql.ai113.ifidieback.service.TaskService;
@@ -32,6 +33,13 @@ public class TaskServiceImpl implements TaskService {
     public List<Task> getDefaultStepTasks() {
         List<Task> defaultStepTasks = taskDao.findDefaultStepTasksBySubtype();
         return defaultStepTasks;
+    }
+
+
+    //A ECRIRE
+    @Override
+    public List<Task> getMyStepTasks(User user) {
+        return null;
     }
 
 

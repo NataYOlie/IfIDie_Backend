@@ -1,6 +1,7 @@
 package fr.eql.ai113.ifidieback.controller.rest;
 
 import fr.eql.ai113.ifidieback.entity.Task;
+import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,17 @@ public class TaskRestController {
      */
     public TaskService taskService;
 
-    @GetMapping("/steplist/{id}/{subtype}")
-    private List<Task> getDefaultStepTasks (@PathVariable Integer id, @PathVariable String subtype){
+    @GetMapping("/mySteplist/")
+    private List<Task> getMyStepTasks (@RequestBody User user){
+        return taskService.getMyStepTasks(user);
+    }
+
+    @GetMapping("/steplist")
+    public List<Task> getDefaultStepTasks (){
         return taskService.getDefaultStepTasks();
     }
 
-    @PostMapping("/{id}/save")
+    @PostMapping("/saveTask")
     private Task saveTask(@PathVariable Task task){
         return taskService.updateTask(task);
     }
