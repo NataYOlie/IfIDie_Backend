@@ -12,12 +12,12 @@ import java.util.*;
 public class ListType {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.AUTO)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     public Integer id_task_type;
     public String list_name;
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(mappedBy = "listType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public List<Task> tasks;
 
     /**

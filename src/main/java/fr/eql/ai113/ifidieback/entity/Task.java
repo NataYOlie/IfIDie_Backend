@@ -13,10 +13,11 @@ import java.util.*;
 public class Task {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer id_task;
     public String subtype;
     public String header;
+    @Column(columnDefinition="TEXT")
     public String description;
     public String externalLink;
     public LocalDate validationDate;
@@ -30,13 +31,14 @@ public class Task {
     public User user;
 
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     public List<Period> periods;
     @JsonIgnore
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     public List<File> files;
 
     @ManyToOne
+    @JoinColumn(referencedColumnName = "id_task_type")
     ListType listType;
 
     /**

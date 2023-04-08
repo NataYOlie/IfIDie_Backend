@@ -208,7 +208,9 @@ public class User implements UserDetails {
     public List<ListType> getListTypes() {
         return listTypes;
     }
-
+    public List<Task> getTasks() {
+        return tasks;
+    }
     //Setters
     public void setId_user(Integer id_user) {
         this.id_user = id_user;
@@ -270,5 +272,20 @@ public class User implements UserDetails {
     }
     public void addAddress(Address address){
         addresses.add(address);
+    }
+    public void setEmailVerificationDate(LocalDate emailVerificationDate) {
+        this.emailVerificationDate = emailVerificationDate;
+    }
+    public void setTrustedPersonConsentDate(LocalDate trustedPersonConsentDate) {
+        this.trustedPersonConsentDate = trustedPersonConsentDate;
+    }
+    public void setClosingDate(LocalDate closingDate) {
+        this.closingDate = closingDate;
+    }
+    public void setDeathDate(LocalDate deathDate) {
+        this.deathDate = deathDate;
+    }
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
