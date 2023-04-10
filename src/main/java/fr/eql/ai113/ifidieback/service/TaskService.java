@@ -9,8 +9,8 @@ import java.util.List;
 public interface TaskService {
 
     List<Task> getDefaultStepTasks();
-    List<Task> getMyStepTasks(User user);
-    UserDetails saveMyStepTasks(UserDetails connectedUser, List<Task> myStepTasks);
+    List<Task> getMyStepTasks(Integer userId);
+    List<Task> saveMyStepTasks(Integer userId, List<Task> myStepTasks) ;
     Task updateTask(Task task);
     Task saveTask(Task task, String listType);
 }

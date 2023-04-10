@@ -5,11 +5,13 @@ import fr.eql.ai113.ifidieback.entity.Task;
 import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.repository.ListTypeDao;
 import fr.eql.ai113.ifidieback.repository.TaskDao;
+import fr.eql.ai113.ifidieback.repository.UserDao;
 import fr.eql.ai113.ifidieback.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +25,10 @@ public class TaskServiceImpl implements TaskService {
      * Injecté par le setter
      */
     private ListTypeDao listTypeDao;
+    /**
+     * Injecté par le setter
+     */
+    private UserDao userDao;
 
 
     /**
@@ -36,16 +42,25 @@ public class TaskServiceImpl implements TaskService {
     }
 
 
-    //A ECRIRE
+    /**
+     * This methods get UserStepTasks
+     * @param userId
+     * @return
+     */
     @Override
-    public List<Task> getMyStepTasks(User user) {
-        return null;
+    public List<Task> getMyStepTasks(Integer userId) {
+        List<Task> myStepTasks = taskDao.findMyStepTasks(userId);
+        System.out.println("myStepTask fait " + myStepTasks.toArray().length);
+        return myStepTasks;
     }
 
 
+    //A ECRIRE
     @Override
-    public UserDetails saveMyStepTasks(UserDetails connectedUser, List<Task> myStepTasks) {
-        return null;
+    public List<Task> saveMyStepTasks(Integer userId, List<Task> myStepTasks) {
+        List<Task> myStepTasks2 = new ArrayList<>();
+
+        return myStepTasks2 ;
     }
 
 
@@ -67,7 +82,7 @@ public class TaskServiceImpl implements TaskService {
      */
     @Override
     public Task saveTask(Task task, String listType) {
-        System.out.println("youyou");
+        System.out.println("savetask in taskserviceImpl");
          ListType listTypeSave = listTypeDao.findByList_name(listType);
          task.setListType(listTypeSave);
         return taskDao.save(task);
@@ -86,5 +101,9 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     public void setListTypeDao(ListTypeDao listTypeDao) {
         this.listTypeDao = listTypeDao;
+    }
+    @Autowired
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
     }
 }

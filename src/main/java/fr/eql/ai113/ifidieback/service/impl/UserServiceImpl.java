@@ -26,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -276,6 +277,30 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("L'utilisateur n'a pas été trouvé.");
         }
         return user;
+    }
+
+    /**
+     *  @Transactional ensures that the loading of the user from the database, the modification of the user's
+     *  list of objects, and the saving of the user back to the database all happen within the same transactional
+     *  context.
+     *  This is important to ensure data consistency and prevent concurrency issues when multiple users are modifying
+     *  the same data at the same time.
+     * @param userId User
+     * @param myTasks List of Tasks
+     */
+    @Transactional
+    @Override
+    public void addTasksToUser(Integer userId, List<Task> myTasks) throws AccountDoesNotExistException {
+
+        // Load the user from the database
+        User user = userDao.findById(userId)
+                .orElseThrow(AccountDoesNotExistException::new);
+
+        // Add the tasks to the user's list
+        user.getTasks().addAll(myTasks);
+
+        // Save the updated user to the database
+        userDao.save(user);
     }
 
     //setters

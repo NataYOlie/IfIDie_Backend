@@ -1,5 +1,6 @@
 package fr.eql.ai113.ifidieback.service;
 
+import fr.eql.ai113.ifidieback.entity.Task;
 import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.service.impl.AccountDoesNotExistException;
 import fr.eql.ai113.ifidieback.service.impl.AccountExistException;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public interface UserService extends UserDetailsService {
     Authentication authenticate (String username, String password) throws AuthenticationException;
@@ -18,6 +20,8 @@ public interface UserService extends UserDetailsService {
                          String country, String city, String phoneNumber, LocalDate birthDate) throws AccountExistException;
 
     User trustedPersonAffect(User client, String username) throws AccountDoesNotExistException;
+
+    void addTasksToUser(Integer userId, List<Task> myTasks) throws AccountDoesNotExistException;
 
     String generateJWTforUser (UserDetails user);
     UserDetails getUserFromJWT (String jwt);
