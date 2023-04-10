@@ -19,6 +19,7 @@ public class Task {
     public String header;
     @Column(columnDefinition="TEXT")
     public String description;
+    public String comment;
     public String externalLink;
     public LocalDate validationDate;
     public LocalDate previsionalDate;
