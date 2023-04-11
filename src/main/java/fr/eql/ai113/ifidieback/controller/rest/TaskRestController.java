@@ -46,6 +46,7 @@ public class TaskRestController {
     //FROM TODOLIST
     @PutMapping("/updatetask/{userid}/{taskid}")
     public Task updateTask(@RequestBody Task newTask, @PathVariable Integer userid, @PathVariable Integer taskid) {
+        System.out.println("update in controller + id task " + newTask.getId_task());
         return taskService.findById(taskid)
                 .map(task -> {
                     task.setComment(newTask.getComment());
@@ -55,7 +56,7 @@ public class TaskRestController {
                     task.setExternalLink(newTask.getExternalLink());
                     User user = userService.getUserById(userid);
                     task.setUser(user);
-                    return taskService.saveTask(newTask, newTask.getListType().toString());
+                    return taskService.saveTask(task, newTask.getListType().toString());
                 })
                 .orElseGet(() -> {
                     newTask.setId_task(taskid);
