@@ -2,17 +2,16 @@ package fr.eql.ai113.ifidieback.service.impl;
 
 import fr.eql.ai113.ifidieback.entity.ListType;
 import fr.eql.ai113.ifidieback.entity.Task;
-import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.repository.ListTypeDao;
 import fr.eql.ai113.ifidieback.repository.TaskDao;
 import fr.eql.ai113.ifidieback.repository.UserDao;
 import fr.eql.ai113.ifidieback.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -59,8 +58,12 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public List<Task> saveMyStepTasks(Integer userId, List<Task> myStepTasks) {
         List<Task> myStepTasks2 = new ArrayList<>();
-
         return myStepTasks2 ;
+    }
+
+    @Override
+    public Optional<Task> findById(Integer id){
+        return taskDao.findById(id);
     }
 
 
@@ -86,6 +89,11 @@ public class TaskServiceImpl implements TaskService {
          ListType listTypeSave = listTypeDao.findByList_name(listType);
          task.setListType(listTypeSave);
         return taskDao.save(task);
+    }
+
+    @Override
+    public void deleteTaskById(Integer id){
+        taskDao.deleteById(id);
     }
 
     //Getter

@@ -23,6 +23,7 @@ public class Task {
     public String externalLink;
     public LocalDate validationDate;
     public LocalDate previsionalDate;
+    public LocalDate creationDate;
     public String taskColor;
     public boolean visible = true;
     public boolean defaultTask = false;
@@ -91,6 +92,12 @@ public class Task {
     public boolean isDefaultTask() {
         return defaultTask;
     }
+    public String getComment() {
+        return comment;
+    }
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
     //Setters
     public void setSubtype(String subtype) {
         this.subtype = subtype;
@@ -133,5 +140,11 @@ public class Task {
     }
     public void setDefaultTask(boolean defaultTask) {
         this.defaultTask = defaultTask;
+    }
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
     }
 }

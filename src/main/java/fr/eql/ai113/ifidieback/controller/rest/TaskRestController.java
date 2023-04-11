@@ -26,7 +26,6 @@ public class TaskRestController {
     public UserService userService;
 
 
-
     @GetMapping("/mySteplist/{userId}")
     private List<Task> getMyStepTasks (@PathVariable("userId") Integer userId){
         return taskService.getMyStepTasks(userId);
@@ -39,24 +38,40 @@ public class TaskRestController {
 
     @PostMapping("/savetask/{listType}/{id}")
     public Task saveTask(@RequestBody Task task, @PathVariable Integer id, @PathVariable String listType) {
-        User user = (User) userService.getUserById(id);
+        User user = userService.getUserById(id);
         task.setUser(user);
         return taskService.saveTask(task, listType);
     }
 
-//    @PostMapping("/saveMyList/{listType}/{userId}")
-//    private void saveMyTasksList (@RequestBody List<Task> myTasks, @PathVariable Integer userId, @PathVariable String listType)
-//            throws AccountDoesNotExistException {
-//        List<Task> myDeserializedTasks = new ArrayList<>();
-//
-//        for (Task task : myTasks
-//             ) {
-//            saveTask(task,);
-//            myDeserializedTasks.add(task);
-//            System.out.println("saveMyTaskList : " + task.header + " added to list" );
-//        }
-//        userService.addTasksToUser(userId, myDeserializedTasks);
-//    }
+    //FROM TODOLIST
+    @PutMapping("/updatetask/{userid}/{taskid}")
+    public Task updateTask(@RequestBody Task newTask, @PathVariable Integer userid, @PathVariable Integer taskid) {
+        return taskService.findById(taskid)
+                .map(task -> {
+                    task.setComment(newTask.getComment());
+                    task.setValidationDate(newTask.getValidationDate());
+                    task.setHeader(newTask.getHeader());
+                    task.setDescription(newTask.getDescription());
+                    task.setExternalLink(newTask.getExternalLink());
+                    User user = userService.getUserById(userid);
+                    task.setUser(user);
+                    return taskService.saveTask(newTask, newTask.getListType().toString());
+                })
+                .orElseGet(() -> {
+                    newTask.setId_task(taskid);
+                    return taskService.saveTask(newTask, newTask.getListType().toString());
+                });
+    }
+
+
+    //FROM TODOLIST
+    @DeleteMapping("/tasks/{id}")
+    public void deleteTask(@PathVariable Integer id) {
+        taskService.deleteTaskById(id);
+    }
+
+
+
 
 
     //Setter
