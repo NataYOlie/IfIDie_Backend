@@ -4,17 +4,18 @@ import fr.eql.ai113.ifidieback.entity.Task;
 import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.service.TaskService;
 import fr.eql.ai113.ifidieback.service.UserService;
-import fr.eql.ai113.ifidieback.service.impl.AccountDoesNotExistException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("task")
 @CrossOrigin(origins ="${front.url}")
 public class TaskRestController {
+    Logger logger = LogManager.getLogger();
 
     /**
      * Injecté par le setter
@@ -46,22 +47,27 @@ public class TaskRestController {
     //FROM TODOLIST
     @PutMapping("/updatetask/{userid}/{taskid}")
     public Task updateTask(@RequestBody Task newTask, @PathVariable Integer userid, @PathVariable Integer taskid) {
-        System.out.println("update in controller + id task " + newTask.getId_task());
-        return taskService.findById(taskid)
-                .map(task -> {
-                    task.setComment(newTask.getComment());
-                    task.setValidationDate(newTask.getValidationDate());
-                    task.setHeader(newTask.getHeader());
-                    task.setDescription(newTask.getDescription());
-                    task.setExternalLink(newTask.getExternalLink());
-                    User user = userService.getUserById(userid);
-                    task.setUser(user);
-                    return taskService.saveTask(task, newTask.getListType().toString());
-                })
-                .orElseGet(() -> {
-                    newTask.setId_task(taskid);
-                    return taskService.saveTask(newTask, newTask.getListType().toString());
-                });
+        User user = userService.getUserById(userid);
+        if (user != null){
+            System.out.println("update in controller + id task " + newTask.getId_task());
+            return taskService.findById(taskid)
+                    .map(task -> {
+                        task.setComment(newTask.getComment());
+                        task.setValidationDate(newTask.getValidationDate());
+                        task.setHeader(newTask.getHeader());
+                        task.setDescription(newTask.getDescription());
+                        task.setExternalLink(newTask.getExternalLink());
+                        task.setDefaultTask(newTask.getIsDefaultTask());
+                        task.setUser(user);
+                        System.out.println("user is : " + user.getSurname());
+                        return taskService.saveTask(task, "StepList");
+                    })
+                    .orElseGet(() -> {
+                        newTask.setId_task(taskid);
+                        return taskService.saveTask(newTask, "StepList");
+                    });
+        }else logger.info("Pas d'utilisateur, la tâche a été ignorée. Et oui.");
+        return newTask;
     }
 
 

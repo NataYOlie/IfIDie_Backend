@@ -23,6 +23,7 @@ public class Task {
     public String externalLink;
     public LocalDate validationDate;
     public LocalDate previsionalDate;
+    public LocalDate modificationDate;
     public LocalDate creationDate;
     public String taskColor;
     public boolean visible = true;
@@ -74,7 +75,7 @@ public class Task {
     public String getTaskColor() {
         return taskColor;
     }
-    public boolean isVisible() {
+    public boolean getIsVisible() {
         return visible;
     }
     public List<Period> getPeriods() {
@@ -89,7 +90,7 @@ public class Task {
     public User getUser() {
         return user;
     }
-    public boolean isDefaultTask() {
+    public boolean getIsDefaultTask() {
         return defaultTask;
     }
     public String getComment() {
@@ -98,6 +99,9 @@ public class Task {
     public LocalDate getCreationDate() {
         return creationDate;
     }
+
+
+
     //Setters
     public void setSubtype(String subtype) {
         this.subtype = subtype;
@@ -147,4 +151,5 @@ public class Task {
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
+
 }
