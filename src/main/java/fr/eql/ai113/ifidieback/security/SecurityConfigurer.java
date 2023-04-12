@@ -69,6 +69,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers("/security/**").permitAll()
                 .antMatchers("/space/**").permitAll()
                 .antMatchers("/task/**").permitAll()
+                .antMatchers("/funnydeath/**").permitAll()
                 .antMatchers("/adminboard/**").hasRole("ADMIN")
 
                 // Points privés
