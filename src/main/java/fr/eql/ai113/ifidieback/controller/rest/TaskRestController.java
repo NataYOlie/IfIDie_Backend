@@ -37,37 +37,47 @@ public class TaskRestController {
         return taskService.getDefaultStepTasks();
     }
 
-    @PostMapping("/savetask/{listType}/{id}")
-    public Task saveTask(@RequestBody Task task, @PathVariable Integer id, @PathVariable String listType) {
-        User user = userService.getUserById(id);
+    @PostMapping("/savetask/{listType}/{user_id}")
+    public Task saveTask(@RequestBody Task task, @PathVariable Integer user_id, @PathVariable String listType) {
+        User user = userService.getUserById(user_id);
         task.setUser(user);
+        System.out.println("saved in controller + id task " + task.getId_task() + " and user is : " + user.getSurname());
         return taskService.saveTask(task, listType);
     }
 
-    //FROM TODOLIST
+    /**
+     * This method update StepList Task
+     * @param newTask from Request Body
+     * @param userid necessarly an id is asked to update a task, if user not found by ID then new task is created
+     * @param taskid if
+     * @return
+     */
     @PutMapping("/updatetask/{userid}/{taskid}")
     public Task updateTask(@RequestBody Task newTask, @PathVariable Integer userid, @PathVariable Integer taskid) {
         User user = userService.getUserById(userid);
-        if (user != null){
-            System.out.println("update in controller + id task " + newTask.getId_task());
-            return taskService.findById(taskid)
-                    .map(task -> {
-                        task.setComment(newTask.getComment());
-                        task.setValidationDate(newTask.getValidationDate());
-                        task.setHeader(newTask.getHeader());
-                        task.setDescription(newTask.getDescription());
-                        task.setExternalLink(newTask.getExternalLink());
-                        task.setDefaultTask(newTask.getIsDefaultTask());
-                        task.setUser(user);
-                        System.out.println("user is : " + user.getSurname());
-                        return taskService.saveTask(task, "StepList");
-                    })
-                    .orElseGet(() -> {
-                        newTask.setId_task(taskid);
-                        return taskService.saveTask(newTask, "StepList");
-                    });
-        }else logger.info("Pas d'utilisateur, la tâche a été ignorée. Et oui.");
-        return newTask;
+        logger.info("UPDATE IN CONTROLLER user is : " + user.getSurname());
+        System.out.println("update in controller + id task " + newTask.getId_task());
+        return taskService.findById(taskid)
+                .map(task -> {
+                    task.setSubtype(newTask.getSubtype());
+                    task.setHeader(newTask.getHeader());
+                    task.setDescription(newTask.getDescription());
+                    task.setExternalLink(newTask.getExternalLink());
+                    task.setTaskColor(newTask.getTaskColor());
+                    task.setDefaultTask(newTask.getIsDefaultTask());
+                    task.setComment(newTask.getComment());
+                    task.setValidationDate(newTask.getValidationDate());
+                    task.setPrevisionalDate(newTask.getPrevisionalDate());
+                    task.setModificationDate(newTask.getModificationDate());
+                    task.setUser(user); // SET USER BY PREVIOUSLY FINDING IT WITH ID
+                    System.out.println("user is : " + user.getSurname());
+                    return taskService.saveTask(task, "StepList"); //Set ListType with this arg
+                })
+                .orElseGet(() -> {
+                    newTask.setId_task(taskid);
+                    newTask.setUser(user);
+                    return taskService.saveTask(newTask, "StepList");
+                });
     }
 
 
@@ -76,9 +86,6 @@ public class TaskRestController {
     public void deleteTask(@PathVariable Integer id) {
         taskService.deleteTaskById(id);
     }
-
-
-
 
 
     //Setter

@@ -99,9 +99,15 @@ public class Task {
     public LocalDate getCreationDate() {
         return creationDate;
     }
-
-
-
+    public LocalDate getModificationDate() {
+        return modificationDate;
+    }
+    public boolean isVisible() {
+        return visible;
+    }
+    public boolean isDefaultTask() {
+        return defaultTask;
+    }
     //Setters
     public void setSubtype(String subtype) {
         this.subtype = subtype;
@@ -151,5 +157,7 @@ public class Task {
     public void setCreationDate(LocalDate creationDate) {
         this.creationDate = creationDate;
     }
-
+    public void setModificationDate(LocalDate modificationDate) {
+        this.modificationDate = modificationDate;
+    }
 }
