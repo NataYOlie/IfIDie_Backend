@@ -81,10 +81,9 @@ public class TaskRestController {
     }
 
 
-    //FROM TODOLIST
-    @DeleteMapping("/tasks/{id}")
-    public void deleteTask(@PathVariable Integer id) {
-        taskService.deleteTaskById(id);
+    @DeleteMapping("/delete/{task_id}")
+    public void deleteTask(@PathVariable Integer task_id) {
+        taskService.deleteTaskById(task_id);
     }
 
 
