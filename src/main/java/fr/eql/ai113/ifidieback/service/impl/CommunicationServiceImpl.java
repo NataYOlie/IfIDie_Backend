@@ -61,11 +61,11 @@ public class CommunicationServiceImpl implements CommunicationService {
                 logger.info("addrecipient");
 
                 // Set Subject: header field
-                message.setSubject("This is the Subject Line!");
+                message.setSubject("Bienvenue chez If I Die !");
                 logger.info("subject");
 
                 // Now set the actual message
-                message.setText("This is actual message");
+                message.setText("Le lien de validation n'existe pas encore ! Merci de faire semblant de cliquer sur ce message");
                 logger.info("set text");
 
                 System.out.println("sending...");

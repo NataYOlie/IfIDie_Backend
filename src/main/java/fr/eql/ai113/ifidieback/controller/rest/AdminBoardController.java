@@ -77,12 +77,16 @@ public class AdminBoardController {
 
     }
 
-    @DeleteMapping("/funnydeath/delete/{id}")
-    public void deleteFunnyDeath(@PathVariable Integer id) {
+    @DeleteMapping("/funnydeath/delete/{fd_id}")
+    public void deleteFunnyDeath(@PathVariable Integer fd_id) {
         logger.info("funnydeath deleted, this one was no fun");
-        funnyDeathService.deleteFunnyDeathById(id);
+        funnyDeathService.deleteFunnyDeathById(fd_id);
     }
 
+    @GetMapping("/funnyDeaths")
+    public List<Funnydeath> getFunnyDeaths (){
+        return funnyDeathService.getFunnyDeaths();
+    }
 
 
     //Setter

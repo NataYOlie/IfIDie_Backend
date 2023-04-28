@@ -4,6 +4,7 @@ import fr.eql.ai113.ifidieback.entity.Funnydeath;
 import fr.eql.ai113.ifidieback.entity.Task;
 import fr.eql.ai113.ifidieback.entity.User;
 import fr.eql.ai113.ifidieback.service.FunnyDeathService;
+import fr.eql.ai113.ifidieback.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,25 @@ public class FunnyDeathController {
      * Injecté par le setter
      */
     FunnyDeathService funnyDeathService;
+    /**
+     * Injecté par le setter
+     */
+    UserService userService;
 
     @GetMapping()
     private Funnydeath getRandomFunnyDeath (){
+        logger.info("Random FunnyDeath is in its way !");
         return funnyDeathService.getRandomFunnyDeath();
     }
+
 
     //Setter
     @Autowired
     public void setFunnyDeathService(FunnyDeathService funnyDeathService) {
         this.funnyDeathService = funnyDeathService;
+    }
+    @Autowired
+    public void setUserService(UserService userService) {
+        this.userService = userService;
     }
 }
