@@ -26,6 +26,11 @@ public class ListType {
     public ListType() {
     }
 
+    public ListType(Integer id_task_type, String list_name) {
+        this.id_task_type = id_task_type;
+        this.list_name = list_name;
+    }
+
     //Getters
     public int getId_task_type() {
         return id_task_type;
@@ -38,4 +43,15 @@ public class ListType {
     }
 
     //Setters
+
+
+    public void setId_task_type(Integer id_task_type) {
+        this.id_task_type = id_task_type;
+    }
+    public void setList_name(String list_name) {
+        this.list_name = list_name;
+    }
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
 }

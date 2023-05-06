@@ -50,6 +50,23 @@ public class Task {
     public Task() {
     }
 
+    public Task(Integer id_task, String subtype, String header, String description, String comment, String externalLink,
+                LocalDate validationDate, LocalDate previsionalDate, LocalDate modificationDate, LocalDate creationDate,
+                String taskColor, boolean visible, boolean defaultTask) {
+        this.id_task = id_task;
+        this.subtype = subtype;
+        this.header = header;
+        this.description = description;
+        this.comment = comment;
+        this.externalLink = externalLink;
+        this.validationDate = validationDate;
+        this.previsionalDate = previsionalDate;
+        this.modificationDate = modificationDate;
+        this.creationDate = creationDate;
+        this.taskColor = taskColor;
+        this.visible = visible;
+        this.defaultTask = defaultTask;
+    }
     //Getters
     public Integer getId_task() {
         return id_task;
