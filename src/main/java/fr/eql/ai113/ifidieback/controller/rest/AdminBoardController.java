@@ -46,11 +46,35 @@ public class AdminBoardController {
         return taskService.saveTask(task, listType);
     }
 
-    @PutMapping("/updatetask")
-    public Task updateTask(@RequestBody Task task){
+    @PutMapping("/updatetask/{user_id}")
+    public Task updateTask(@RequestBody Task task, @PathVariable Integer user_id){
         logger.info("task updates ! " + task.header);
-        return taskService.updateTask(task);
+        User user = userService.getUserById(user_id);
+        logger.info("UPDATE IN ADMIN CONTROLLER user is : " + user.getSurname());
+        System.out.println("update in ADMIN controller + id task " + task.getId_task());
+        return taskService.findById(task.id_task)
+                .map(taskfound -> {
+                    taskfound.setSubtype(task.getSubtype());
+                    taskfound.setHeader(task.getHeader());
+                    taskfound.setDescription(task.getDescription());
+                    taskfound.setExternalLink(task.getExternalLink());
+                    taskfound.setTaskColor(task.getTaskColor());
+                    taskfound.setDefaultTask(task.getIsDefaultTask());
+                    taskfound.setComment(task.getComment());
+                    taskfound.setValidationDate(task.getValidationDate());
+                    taskfound.setPrevisionalDate(task.getPrevisionalDate());
+                    taskfound.setModificationDate(task.getModificationDate());
+                    taskfound.setUser(user); // SET USER BY PREVIOUSLY FINDING IT WITH ID
+                    System.out.println("user is : " + user.getSurname());
+                    return taskService.saveTask(taskfound, "StepList"); //Set ListType with this arg
+                })
+                .orElseGet(() -> {
+                    task.setId_task(task.id_task);
+                    task.setUser(user);
+                    return taskService.saveTask(task, "StepList");
+                });
     }
+
 
 
     @PutMapping("/funnydeath/update/{id_funnydeath}")
